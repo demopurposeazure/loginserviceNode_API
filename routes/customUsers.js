@@ -16,11 +16,11 @@ router.post('/', function(req, response, next) {
             if (err) 
               throw err;
             else {
-                client.query(userQuery)
-                        .then(res => {
-                            const rows = res.rows;
-                            // console.log('res ', res);
-                            console.log('ROWS ', rows);   
+                // client.query(userQuery)
+                //         .then(res => {
+                //             const rows = res.rows;
+                //             // console.log('res ', res);
+                //             console.log('ROWS ', rows);   
                             let responseObject = {};  
                            // response.json(responseObject);
                            query1 = `select * from users where username =  '${req.body.userName}' and password = '${req.body.passWord}'`;
@@ -37,7 +37,8 @@ router.post('/', function(req, response, next) {
                                             statusCode:200,
                                             url:req.baseUrl,
                                             original:req.originalUrl,
-                                            userExists:true
+                                            userExists:true,
+                                            userDetails : user
                                           });
                                           
                                    } 
@@ -50,7 +51,8 @@ router.post('/', function(req, response, next) {
                                             reqbody:req.body,
                                             url:req.baseUrl,
                                             original:req.originalUrl,
-                                            userExists:false
+                                            userExists:false,
+                                            userDetails : {}
                                           });
                                    }
                               }
@@ -63,17 +65,18 @@ router.post('/', function(req, response, next) {
                                             reqbody:req.body,
                                             url:req.baseUrl,
                                             original:req.originalUrl,
-                                            userExists:false
+                                            userExists:false,
+                                            userDetails : {}
                                           });
                             }
                            }).catch(err => {
                               client.end(console.log(err));
                            });
-                        })
-                        .catch(err => {
-                            client.end(console.log('Closed client connection'));
-                            console.log(err);
-                    });
+                    //     })
+                    //     .catch(err => {
+                    //         client.end(console.log('Closed client connection'));
+                    //         console.log(err);
+                    // });
             }
          })
   // let response = {userName: 'admin',passWord:'admin',statusText:'OK',statusCode:200,reqbody:req.body,url:req.baseUrl,original:req.originalUrl};

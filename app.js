@@ -8,6 +8,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var userDetailsRouter = require('./routes/customUsers');
 var graphRouter = require('./routes/graph');
+var submitUser = require('./routes/submitUser');
+var showUserDetails = require('./routes/showUserDetails');
+var tableDataRouter = require('./routes/tableData');
 
 var app = express();
 
@@ -34,6 +37,9 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/fetchUserDetails',userDetailsRouter);
 app.use('/graph',graphRouter);
+app.use('/submitUser',submitUser);
+app.use('/showUserDetails', showUserDetails);
+app.use('/fetchTableData', tableDataRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
