@@ -1,0 +1,51 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: acrdemoregistry123.azurecr.io
+        username: ${{ secrets.acr_acrdemoregistry123_username }}
+        password: ${{ secrets.acr_acrdemoregistry123_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t acrdemoregistry123.azurecr.io/k8cluster:${{ github.sha }}
+        docker push acrdemoregistry123.azurecr.io/k8cluster:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_k8cluster_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep k8cluster9908 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace k8cluster9908`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: k8cluster9908
+        container-registry-url: acrdemoregistry123.azurecr.io
+        container-registry-username: ${{ secrets.acr_acrdemoregistry123_username }}
+        container-registry-password: ${{ secrets.acr_acrdemoregistry123_password }}
+        secret-name: k8clusterdockerauth
+       
+    - uses: azure/k8s-deploy@v1.2
+      with:
+        namespace: k8cluster9908
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+          manifests/ingress.yml
+        images: |
+          acrdemoregistry123.azurecr.io/k8cluster:${{ github.sha }}
+        imagepullsecrets: |
+          k8clusterdockerauth
