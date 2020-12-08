@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "k8cluster-c04e"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "k8cluster-c04e"
+  template:
+    metadata:
+      labels:
+        app: "k8cluster-c04e"
+    spec:
+      containers:
+        - name: "k8cluster-c04e"
+          image: "acrdemoregistry123.azurecr.io/k8cluster"
+          ports:
+          - containerPort: 80
