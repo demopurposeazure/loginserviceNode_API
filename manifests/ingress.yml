@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: "k8cluster-c04e"
+    labels:
+        app: "k8cluster-c04e"
+    annotations:
+        kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+    rules:
+        - host: k8cluster9908-k8cluster-c04e.501150d59e324d599334.centralus.aksapp.io
+          http:
+            paths:
+            - path: /
+              backend:
+                serviceName: "k8cluster-c04e"
+                servicePort: 80
