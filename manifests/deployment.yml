@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: nodeapiv1 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodeapiv1
+  template:
+    metadata:
+      labels:
+        app: nodeapiv1 
+    spec:
+      containers:
+        - name: nodeapiv1 
+          image: acrdemoregistry123.azurecr.io/nodeapiv1
+          ports:
+          - containerPort: 80
