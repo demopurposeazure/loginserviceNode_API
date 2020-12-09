@@ -1,13 +1,12 @@
-FROM node:11-alpine
+FROM node:12.18.1
+ENV NODE_ENV=production
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package*.json ./
+COPY ["package.json", "package-lock.json*", "./"]
 
-RUN npm install
+RUN npm install --production
 
 COPY . .
 
-EXPOSE 80
-
-CMD ["npm", "start"]
+CMD [ "npm", "start" ]
