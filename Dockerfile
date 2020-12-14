@@ -10,10 +10,20 @@ COPY package.json package-lock.json ./
 # Install app dependencies
 RUN npm install
 
-# Bundle app source
-COPY . .
+# nginx base image
+FROM nginx:1.16.0-alpine
 
-EXPOSE 3000
+# copy static contents of project to nginx html 
+COPY  . .
 
-# Start Node server
-CMD [ "npm", "start" ]
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+
+# # Bundle app source
+# COPY . .
+
+# EXPOSE 3000
+
+# # Start Node server
+# CMD [ "npm", "start" ]
